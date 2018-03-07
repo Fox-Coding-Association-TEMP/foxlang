@@ -17,6 +17,8 @@ enum iname {
 	BINARY_SUBTRACT, //TOS = TOS - TOS1
 	BINARY_DIVIDE, //TOS = TOS / TOS1
 	BINARY_MULTIPLY, //TOS = TOS * TOS1
+	BINARY_MODULO, //TOS = TOS % TOS1
+	BINARY_POWER, //TOS = TOS ** TOS1
 
 	//variables
 	LOAD_VAR, //TOS = varnames[arg]
@@ -29,10 +31,13 @@ enum iname {
 	//flow
 	JUMP_TOSISTRUE, // if(TOS == True){execute(block)}
 	JUMP, //execute(block)
+	CALL_TOSISTRUE, // if(TOS == True){execute(block)}
+	CALL, //execute(block)
+
 
 	//types
-	CREATE_LIST, //TOS = list(TOS...TOS[arg])
-	CREATE_DICT, //TOS = dict(TOS:TOS1...TOS[arg]:TOS[arg+1])
+	CONSTRUCT_LIST, //TOS = list(TOS...TOS[arg])
+	CONSTRUCT_DICT, //TOS = dict(TOS:TOS1...TOS[arg]:TOS[arg+1])
 
 
 	//other

@@ -28,34 +28,108 @@ void ExecutionUnit::Execute(){
 		this->blockstack.push(this->blocks[0]);
 	}
 
-	stack<BaseObject *> s;
-	for(Instruction instruction : this->blockstack.top()->bytecode){
+	long int PC = 0;
+	while(true){
+		Instruction instruction = this->blockstack.top()->bytecode[PC];
 		if(DEBUG){cout<<"now executing:"<<instruction.InstructionCode<<", arg:"<<instruction.InstructionArgument<<endl;}
 		switch(instruction.InstructionCode){
-			case NOP: 
+			case NOP: {
 				break;
-			case STOP_EXECUTION:
+			}	
+			case STOP_EXECUTION:{
 				if(DEBUG){cout<<"exiting program"<<endl;}
 				exit(0);
 				break;
-			case LOAD_CONST:
-				s.push(
+			}	
+			case LOAD_CONST:{
+				this->blockstack.top()->s.push(
 					this->blockstack.top()->constants[
 						instruction.InstructionArgument
 						]
 					);
-				break;	
-			case BINARY_ADD:
-				BaseObject * a = s.top();
-				s.pop();
-				BaseObject * b = s.top();
-				s.pop();
-				s.push(
+				break;
+			}	
+			case BINARY_ADD:{
+				BaseObject * a = this->blockstack.top()->s.top();
+				this->blockstack.top()->s.pop();
+				BaseObject * b = this->blockstack.top()->s.top();
+				this->blockstack.top()->s.pop();
+				this->blockstack.top()->s.push(
 					b->__add__(a)
 					);
+				break;
+			}	
+			case BINARY_SUBTRACT:{
+				BaseObject * a = this->blockstack.top()->s.top();
+				this->blockstack.top()->s.pop();
+				BaseObject * b = this->blockstack.top()->s.top();
+				this->blockstack.top()->s.pop();
+				this->blockstack.top()->s.push(
+					b->__sub__(a)
+					);
+				break;
+			}	
+			case BINARY_MULTIPLY:{
+				BaseObject * a = this->blockstack.top()->s.top();
+				this->blockstack.top()->s.pop();
+				BaseObject * b = this->blockstack.top()->s.top();
+				this->blockstack.top()->s.pop();
+				this->blockstack.top()->s.push(
+					b->__mul__(a)
+					);
 				break;	
+			}	
+			case BINARY_DIVIDE:{
+				BaseObject * a = this->blockstack.top()->s.top();
+				this->blockstack.top()->s.pop();
+				BaseObject * b = this->blockstack.top()->s.top();
+				this->blockstack.top()->s.pop();
+				this->blockstack.top()->s.push(
+					b->__div__(a)
+					);
+				break;
+			}	
+			case BINARY_MODULO:{
+				BaseObject * a = this->blockstack.top()->s.top();
+				this->blockstack.top()->s.pop();
+				BaseObject * b = this->blockstack.top()->s.top();
+				this->blockstack.top()->s.pop();
+				this->blockstack.top()->s.push(
+					b->__mod__(a)
+					);
+				break;	
+			}	
+			case BINARY_POWER:{
+				BaseObject * a = this->blockstack.top()->s.top();
+				this->blockstack.top()->s.pop();
+				BaseObject * b = this->blockstack.top()->s.top();
+				this->blockstack.top()->s.pop();
+				this->blockstack.top()->s.push(
+					b->__pow__(a)
+					);
+				break;	
+			}		
+			case CONSTRUCT_LIST:{
+				List * l = new List();
+				for(int i = 0; i < instruction.InstructionArgument; ++i){
+					l->append(this->blockstack.top()->s.top());
+					this->blockstack.top()->s.pop();
+				}
+				this->blockstack.top()->s.push(l);
+				break;	
+			}	
+			case JUMP:{
+				Block * b = this->blocks[instruction.InstructionArgument];
+				this->blockstack.pop();
+				this->blockstack.push(b);
+				PC = 0;
+				this->blockstack.top()->s = stack<BaseObject *>();
+				continue;
+				break;	
+			}	
+			PC++;
 		}
-		if(DEBUG){printobjectstack(s);}
+		if(DEBUG){printobjectstack(this->blockstack.top()->s);}
 	}
 }
 

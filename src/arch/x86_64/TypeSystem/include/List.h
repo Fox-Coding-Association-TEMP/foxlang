@@ -9,6 +9,7 @@ class List : public BaseObject{
 	public:
 		std::vector<BaseObject *> val;
 		List(std::vector<BaseObject *> val);
+		List();
 		virtual BaseObject * __add__(BaseObject * other);
 		virtual BaseObject * __sub__(BaseObject * other);
 		virtual BaseObject * __mul__(BaseObject * other);
@@ -19,6 +20,11 @@ class List : public BaseObject{
 		virtual BaseObject * __copy__();
 		virtual std::string __type__();
 		virtual std::string __repr__();
+
+		void from_vector(std::vector<BaseObject *> items);
+		void append(BaseObject * item);
+		void extend(BaseObject * items);
+		void repeat(BaseObject * items);
 };
 
 #endif
