@@ -33,7 +33,7 @@ enum iname {
 	JUMP, //execute(block)
 	CALL_TOSISTRUE, // if(TOS == True){execute(block)}
 	CALL, //execute(block)
-
+	RETURN,
 
 	//types
 	CONSTRUCT_LIST, //TOS = list(TOS...TOS[arg])

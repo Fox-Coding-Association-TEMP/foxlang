@@ -17,8 +17,8 @@ int main(int argc, char *argv[]){
 
 	Block * B1 = new Block();
 	B1->bytecode = {
-		Instruction {JUMP, 1},
-		Instruction {STOP_EXECUTION}
+		Instruction {CALL, 1},
+		Instruction {LOAD_CONST, 0},
 	};
 	B1->constants = {
 		new Integer(3),
@@ -28,7 +28,7 @@ int main(int argc, char *argv[]){
 	Block * B2 = new Block();
 	B2->bytecode = {
 		Instruction {LOAD_CONST, 1},
-		Instruction {STOP_EXECUTION}
+		Instruction {RETURN}
 	};
 	B2->constants = {
 		new Integer(3),

@@ -28,9 +28,10 @@ void ExecutionUnit::Execute(){
 		this->blockstack.push(this->blocks[0]);
 	}
 
-	long int PC = 0;
 	while(true){
-		Instruction instruction = this->blockstack.top()->bytecode[PC];
+		// cout<<this->blockstack.top()->PC<<endl;
+		Instruction instruction = this->blockstack.top()->bytecode[this->blockstack.top()->PC];
+		if(DEBUG){cout<<this->blockstack.top()->PC<<endl;}
 		if(DEBUG){cout<<"now executing:"<<instruction.InstructionCode<<", arg:"<<instruction.InstructionArgument<<endl;}
 		switch(instruction.InstructionCode){
 			case NOP: {
@@ -122,13 +123,30 @@ void ExecutionUnit::Execute(){
 				Block * b = this->blocks[instruction.InstructionArgument];
 				this->blockstack.pop();
 				this->blockstack.push(b);
-				PC = 0;
+				this->blockstack.top()->PC = 0;
 				this->blockstack.top()->s = stack<BaseObject *>();
 				continue;
 				break;	
+			}		
+			case CALL:{
+				Block * b = this->blocks[instruction.InstructionArgument];
+				this->blockstack.push(b);
+				this->blockstack.top()->PC++;
+				this->blockstack.top()->s = stack<BaseObject *>();
+				continue;
+				break;	
+			}			
+			case RETURN:{
+				if(!this->blockstack.empty()){
+					this->blockstack.pop();
+					continue;
+				}else{
+					exit(1); //exception handler
+				}
+				break;	
 			}	
-			PC++;
 		}
+		this->blockstack.top()->PC++;
 		if(DEBUG){printobjectstack(this->blockstack.top()->s);}
 	}
 }

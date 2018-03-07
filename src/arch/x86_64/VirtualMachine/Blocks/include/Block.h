@@ -14,6 +14,7 @@ using namespace std;
 
 struct Block{
 	public:
+		int PC = 0;
 		stack<BaseObject *> s;
 		vector<Instruction> bytecode;
 		vector<BaseObject *> constants;
