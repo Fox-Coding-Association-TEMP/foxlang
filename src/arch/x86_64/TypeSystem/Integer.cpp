@@ -1,3 +1,5 @@
+#define __USE_MINGW_ANSI_STDIO 0
+
 #include <iostream>
 #include <string>
 #include <math.h>

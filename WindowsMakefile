@@ -2,8 +2,8 @@ OS := $(shell uname)
 version = 0.0.1
 arch ?= x86_64
 executable := build/$(arch)
-#windows:
-dirs =  src/arch/$(arch) src/arch/$(arch)/TypeSystem src/arch/$(arch)/TypeSystem/include src/arch/$(arch)/VirtualMachine src/arch/$(arch)/VirtualMachine/include
+
+dirs =  src/arch/$(arch) src/arch/$(arch)/TypeSystem src/arch/$(arch)/TypeSystem/include src/arch/$(arch)/VirtualMachine src/arch/$(arch)/VirtualMachine/include src/arch/$(arch)/include src/arch/$(arch)/VirtualMachine/Blocks/include src/arch/$(arch)/VirtualMachine/Blocks src/arch/$(arch)/JSONparser src/arch/$(arch)/JSONparser/include
 includedirs :=  $(sort $(foreach dir, $(foreach dir1, $(dirs), $(shell dirname $(dir1))), $(wildcard $(dir)/include)))
 testfile = test.fox
 
@@ -16,15 +16,15 @@ CPPFLAGS += $(foreach dir, $(includedirs), -I./$(dir))
 
 assembly_source_files := $(foreach dir,$(dirs),$(wildcard $(dir)*.asm))
 assembly_object_files := $(patsubst src/arch/$(arch)%.asm, \
-    build/arch/$(arch)%.obj, $(assembly_source_files))
+    build/arch/$(arch)%.o, $(assembly_source_files))
 
 c_source_files := $(foreach dir,$(dirs),$(wildcard $(dir)*.c))
 c_object_files := $(patsubst src/arch/$(arch)%.c, \
-    build/arch/$(arch)%.obj, $(c_source_files))
+    build/arch/$(arch)%.o, $(c_source_files))
 
 cpp_source_files := $(foreach dir,$(dirs),$(wildcard $(dir)/*.cpp))
 cpp_object_files := $(patsubst src/arch/$(arch)/%.cpp, \
-    build/arch/$(arch)/%.obj, $(cpp_source_files))
+    build/arch/$(arch)/%.o, $(cpp_source_files))
 
 .PHONY: all clean run
 
@@ -52,19 +52,19 @@ $(executable): $(assembly_object_files) $(c_object_files) $(cpp_object_files)
 	@$(linker) $(LDLAGS) -o $(executable) $(assembly_object_files) $(c_object_files) $(cpp_object_files)
 
 # compile assembly files
-build/arch/$(arch)/%.obj: src/arch/$(arch)/%.asm
+build/arch/$(arch)/%.o: src/arch/$(arch)/%.asm
 	@mkdir -p $(shell dirname $@)
 	@echo compiling $<
 	@nasm -i./src/arch/$(arch)/ -felf32 $< -o $@
 
 # compile c files
-build/arch/$(arch)/%.obj: src/arch/$(arch)/%.c
+build/arch/$(arch)/%.o: src/arch/$(arch)/%.c
 	@mkdir -p $(shell dirname $@)
 	@echo compiling $<
 	@gcc $(CFLAGS) $< -c -o $@
 
 # compile cpp files
-build/arch/$(arch)/%.obj: src/arch/$(arch)/%.cpp
+build/arch/$(arch)/%.o: src/arch/$(arch)/%.cpp
 	@mkdir -p $(shell dirname $@)
 	@echo compiling $<
 	@g++ $(CPPFLAGS) $< -o $@
