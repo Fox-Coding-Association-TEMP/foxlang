@@ -18,6 +18,11 @@ class BaseObject{
 		virtual BaseObject * __pow__(BaseObject * other) = 0;
 		virtual BaseObject * __mod__(BaseObject * other) = 0;
 		
+		virtual BaseObject * __getattr__(BaseObject * attr) = 0;
+		virtual BaseObject * __getitem__(BaseObject * item) = 0;
+		virtual void __setitem__(BaseObject * item, BaseObject * val) = 0;
+		virtual void __setattr__(BaseObject * attr, BaseObject * val) = 0;
+
 		virtual BaseObject * __copy__() = 0;
 		virtual std::string __type__();
 		virtual std::string __repr__();

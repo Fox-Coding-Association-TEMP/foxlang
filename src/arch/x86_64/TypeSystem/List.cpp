@@ -84,7 +84,7 @@ void List::extend(BaseObject * items){
 void List::repeat(BaseObject * item){
 	if(item->__type__() == "Integer"){
 		vector<BaseObject *> v = this->val;
-		for (int i = 0; i < dynamic_cast<Integer *>(item)->val; ++i)
+		for (int i = 0; i < dynamic_cast<Integer *>(item)->val - 1; ++i)
 		{
 			this->val.insert(this->val.end(), v.begin(), v.end());
 		}

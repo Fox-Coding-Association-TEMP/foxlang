@@ -29,8 +29,12 @@ void ExecutionUnit::Execute(){
 	}
 
 	while(true){
-		// cout<<this->blockstack.top()->PC<<endl;
+		if (this->blockstack.top()->PC >= this->blockstack.top()->bytecode.size()){
+			if(DEBUG){cout<<"exiting program (automated exit)"<<endl;}
+			exit(0);
+		}
 		Instruction instruction = this->blockstack.top()->bytecode[this->blockstack.top()->PC];
+
 		if(DEBUG){cout<<this->blockstack.top()->PC<<endl;}
 		if(DEBUG){cout<<"now executing:"<<instruction.InstructionCode<<", arg:"<<instruction.InstructionArgument<<endl;}
 		switch(instruction.InstructionCode){
@@ -125,21 +129,23 @@ void ExecutionUnit::Execute(){
 				this->blockstack.push(b);
 				this->blockstack.top()->PC = 0;
 				this->blockstack.top()->s = stack<BaseObject *>();
+				if(DEBUG){printobjectstack(this->blockstack.top()->s);}
 				continue;
 				break;	
 			}		
 			case CALL:{
 				Block * b = this->blocks[instruction.InstructionArgument];
 				this->blockstack.push(b);
-				this->blockstack.top()->PC++;
 				this->blockstack.top()->s = stack<BaseObject *>();
+				this->blockstack.top()->PC = 0;
+				if(DEBUG){printobjectstack(this->blockstack.top()->s);}
 				continue;
 				break;	
 			}			
 			case RETURN:{
+				cout<<this->blockstack.size()<<endl;
 				if(!this->blockstack.empty()){
 					this->blockstack.pop();
-					continue;
 				}else{
 					exit(1); //exception handler
 				}
