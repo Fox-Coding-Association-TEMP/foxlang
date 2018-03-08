@@ -65,6 +65,23 @@ BaseObject * List::__copy__(){
 }
 
 
+BaseObject * List::__getitem__(BaseObject * item){
+	exit(1);
+}
+
+void List::__setitem__(BaseObject * item, BaseObject * val){
+	exit(1);
+}
+
+BaseObject * List::__getattr__(BaseObject * attr){
+	exit(1);
+}
+
+void List::__setattr__(BaseObject * attr, BaseObject * val){
+	exit(1);
+}
+
+
 void List::from_vector(vector<BaseObject *> items){
 	this->val = items;
 }

@@ -6,5 +6,6 @@
 #include <Float.h>
 #include <List.h>
 #include <Dict.h>
+#include <String.h>
 
 #endif
